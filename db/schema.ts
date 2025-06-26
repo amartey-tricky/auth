@@ -57,3 +57,5 @@ export const verification = pgTable("verification", {
   createdAt: timestamp("created_at").$defaultFn(() => /* @__PURE__ */ new Date()),
   updatedAt: timestamp("updated_at").$defaultFn(() => /* @__PURE__ */ new Date()),
 }).enableRLS();
+
+export const schema = { user, session, account, verification };

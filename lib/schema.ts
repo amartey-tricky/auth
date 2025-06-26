@@ -1,17 +1,17 @@
-import { z } from "zod/v4";
+import { email, z } from "zod/v4";
 
 export const signUpSchema = z
   .object({
     name: z
       .string()
       .min(3, "Name too short")
-      .regex(/^[a-zA-Z]*$/),
+      .regex(/^[a-z A-Z]*$/),
     email: z.email("Email is not valid"),
-    username: z
-      .string()
-      .min(3, "Username too short")
-      .max(20, "Username too long")
-      .regex(/^[a-zA-Z0-9_]*$/, "Username can only contain letters, numbers, and underscores"),
+    // username: z
+    //   .string()
+    //   .min(3, "Username too short")
+    //   .max(20, "Username too long")
+    //   .regex(/^[a-zA-Z0-9_]*$/, "Username can only contain letters, numbers, and underscores"),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters")
@@ -27,11 +27,7 @@ export const signUpSchema = z
   });
 
 export const signInSchema = z.object({
-  username: z
-    .string()
-    .min(3, "Username too short")
-    .max(20, "Username too long")
-    .regex(/^[a-zA-Z0-9_]*$/, "Username can only contain letters, numbers, and underscores"),
+  email: z.email("Email is not valid"),
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
