@@ -6,8 +6,9 @@ import { username } from "better-auth/plugins";
 import { db } from "@/db";
 import { schema } from "@/db/schema";
 
-const googleClientId = process.env.GOOGLE_CLIENT_ID as string;
-const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET as string;
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const betterAuthUrl = process.env.BETTER_AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -30,14 +31,13 @@ export const auth = betterAuth({
     },
   },
 
-  socialProviders: {
+  socialProviders: googleClientId && googleClientSecret ? {
     google: {
-      prompt: "select_account+consent",
       clientId: googleClientId,
       clientSecret: googleClientSecret,
-      redirectURI: `${process.env.BETTER_AUTH_URL}/api/auth/callback/google`,
+      redirectURI: `${betterAuthUrl}/api/auth/callback/google`,
     },
-  },
+  } : {},
 
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
@@ -56,5 +56,11 @@ export const auth = betterAuth({
       },
     }),
     nextCookies(),
+  ],
+
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://auth-xi-indol.vercel.app",
+    betterAuthUrl,
   ],
 });

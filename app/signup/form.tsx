@@ -54,23 +54,17 @@ export function SignUpForm() {
 
   const signInWithGoogle = async () => {
     setIsGoogleLoading(true);
-    toast.loading("Redirecting to Google...");
+    const loadingToast = toast.loading("Redirecting to Google...");
     
     try {
-      const result = await authClient.signIn.social({
+      await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
       });
-      
-      if (result?.error) {
-        toast.dismiss();
-        toast.error("Google sign-in failed. Please try again.");
-      }
     } catch (error) {
       console.error("Google sign-in error:", error);
-      toast.dismiss();
-      toast.error("Google sign-in failed. Please try again.");
-    } finally {
+      toast.dismiss(loadingToast);
+      toast.error("Google sign-in is not available. Please check your configuration.");
       setIsGoogleLoading(false);
     }
   };
