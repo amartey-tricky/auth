@@ -58,14 +58,21 @@ export function LoginForm() {
 
   const signInWithGoogle = async () => {
     setIsGoogleLoading(true);
+    toast.loading("Redirecting to Google...");
     
     try {
-      await authClient.signIn.social({
+      const result = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
       });
+      
+      if (result?.error) {
+        toast.dismiss();
+        toast.error("Google sign-in failed. Please try again.");
+      }
     } catch (error) {
       console.error("Google sign-in error:", error);
+      toast.dismiss();
       toast.error("Google sign-in failed. Please try again.");
     } finally {
       setIsGoogleLoading(false);
