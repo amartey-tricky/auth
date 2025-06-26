@@ -1,15 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-// import { signIn, signUp } from "@/lib/auth-client"
-// import { authClient } from "@/lib/auth-client";
-
-// export const signInWithGoogle = async () => {
-//   await authClient.signIn.social({
-//     provider: "google",
-//     callbackURL: "/dashboard",
-//   });
-// };
+import { redirect } from "next/navigation";
 
 export const signIn = async (email: string, password: string) => {
   try {
@@ -40,38 +32,19 @@ export const signUp = async (email: string, password: string, name: string) => {
     return { success: true, message: "Sign up successful" };
   } catch (error) {
     const err = error as Error;
-    console.error(Error, err);
+    console.error("Sign up error:", err);
 
     return { success: false, message: err.message || "Something went wrong" };
   }
 };
 
-// export const signUpAction = async (email: string, password: string, username: string, name: string) => {
-//   try {
-//     await signUp.email({
-//       email,
-//       password,
-//       username,
-//       name,
-//     });
-
-//     return { success: true, message: "Sign up successful" };
-//   } catch (error) {
-//     const err = error as Error;
-//     return { success: false, message: err.message || "Something went wrong" };
-//   }
-// };
-
-// export const signInAction = async (username: string, password: string) => {
-//   try {
-//     await signIn.username({
-//       username,
-//       password,
-//     });
-
-//     return { success: true, message: "Sign in successful" };
-//   } catch (error) {
-//     const err = error as Error;
-//     return { success: false, message: err.message || "Something went wrong" };
-//   }
-// };
+export const signOut = async () => {
+  try {
+    await auth.api.signOut();
+    redirect("/");
+  } catch (error) {
+    const err = error as Error;
+    console.error("Sign out error:", err);
+    throw new Error(err.message || "Failed to sign out");
+  }
+};
