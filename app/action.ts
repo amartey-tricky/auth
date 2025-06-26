@@ -1,8 +1,15 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 // import { signIn, signUp } from "@/lib/auth-client"
 // import { authClient } from "@/lib/auth-client";
-import { auth } from "@/lib/auth";
+
+// export const signInWithGoogle = async () => {
+//   await authClient.signIn.social({
+//     provider: "google",
+//     callbackURL: "/dashboard",
+//   });
+// };
 
 export const signIn = async (email: string, password: string) => {
   try {

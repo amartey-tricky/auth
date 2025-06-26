@@ -6,6 +6,9 @@ import { username } from "better-auth/plugins";
 import { db } from "@/db";
 import { schema } from "@/db/schema";
 
+const googleClientId = process.env.GOOGLE_CLIENT_ID as string;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET as string;
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -14,6 +17,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
+    autoSignIn: false,
     requireEmailVerification: false,
     password: {
       hash: async (password: string) => {
@@ -23,6 +27,15 @@ export const auth = betterAuth({
       verify: async ({ password, hash }: { password: string; hash: string }) => {
         return await bcrypt.compare(password, hash);
       },
+    },
+  },
+
+  socialProviders: {
+    google: {
+      prompt: "select_account+consent",
+      clientId: googleClientId,
+      clientSecret: googleClientSecret,
+      redirectURI: `${process.env.BETTER_AUTH_URL}/api/auth/callback/google`,
     },
   },
 
