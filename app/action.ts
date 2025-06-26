@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 export const signIn = async (email: string, password: string) => {
   try {
@@ -40,7 +41,9 @@ export const signUp = async (email: string, password: string, name: string) => {
 
 export const signOut = async () => {
   try {
-    await auth.api.signOut();
+    await auth.api.signOut({
+      headers: await headers(),
+    });
     redirect("/");
   } catch (error) {
     const err = error as Error;
